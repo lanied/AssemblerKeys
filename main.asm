@@ -3,7 +3,8 @@
 ;Proyecto 'Piano Leonardo'
 ;Ensamblador 8086 & Arduino AtMegau32u4
 ;-----------------------------------------------------------------
-INCLUDE emu8086.inc
+INCLUDE emu8086.inc  
+
 STACK SEGMENT
     DW   128  DUP(0)
 ENDS   
@@ -46,4 +47,5 @@ CODE SEGMENT
 CODE ENDS  
 
 INCLUDE librerias.lib
+
      END START       
