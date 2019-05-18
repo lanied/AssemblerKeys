@@ -1,0 +1,255 @@
+TONO MACRO NUMERO               ;Esta macro recibe el tono
+        MOV     BX,NUMERO       ;y manda a llamar a los procedimientos
+        CALL    BOCINA
+ENDM
+
+;----------------------------------------------------------------------------
+
+CLRSCR PROC
+;Limpia la pantalla
+        MOV     AH,6
+        XOR     AL,AL
+        XOR     CX,CX
+        MOV     DX,184FH
+        MOV     BH,13
+        INT     10H
+        RET
+ENDP
+
+;----------------------------------------------------------------------------
+
+BocinaOn  PROC                  ;Activa la bocina 61h timer 1.193Mhz 
+        IN      AL, 61h
+        OR      AL, 11B
+        OUT     61h, AL
+        RET
+BocinaOn  ENDP
+
+;----------------------------------------------------------------------------
+
+BocinaOff  PROC                 ;Desactiva la bocina
+        IN      AL, 61h	 		;  Read current port mode B (8255)
+        AND     AL, 11111100b
+        OUT     61h, AL
+        RET
+BocinaOff  ENDP
+
+;----------------------------------------------------------------------------
+
+Ajustar  PROC                  ;Ajusta la bocina con la frecuencia dada
+        PUSH    BP
+        MOV     BP, SP
+        MOV     DX, 18      
+        MOV     AX, 13353   ;retardo en milisegundos
+        MOV     BX, [BP + 4] ;18.2 tics/seg
+        DIV     BX
+        MOV     BX, AX  
+        MOV     AL, 0B6h  	;  set for channel  2 (8253)
+        OUT     43h, AL 	;  command register  8253
+;ENVIAR AL PUERTO LA FRECUENCIA EN DOS BYTES POR SEPARADO.
+        MOV     AX, BX
+        OUT     42h, AL ;ENVIA PRIMER BYTE. (PUERTO PARALELO = 378H)
+        MOV     AL, AH
+        OUT     42h, AL ;ENVIA SEGUNDO BYTE. (PUERTO SERIAL = 3F8H)
+        POP     BP
+        RET
+Ajustar  ENDP
+
+;----------------------------------------------------------------------------
+
+Suena proc                      ;Activa la bocina y coloca el nombre de
+        CALL bocinaON           ;la tecla.
+        MOV     AX,40H
+        MOV     ES,AX
+        MOV     DX,ES:[006EH]
+        MOV     AX,ES:[006CH]
+        ADD     AX,7
+        ADC     DX,0            ;Se le suma 7 unidades a ese valor
+CLIC:
+        CMP     DX,ES:[006EH]   ;Y se compara hasta que sean iguales
+        JB      FINI            ;Pasando por un ciclo, cuando llegen
+        JA      CLIC            ;a ser iguales se sale del ciclo y
+        CMP     AX,ES:[006CH]
+        JA      CLIC
+FINI:
+        CALL    BocinaOff       ;Se desconecta la bocina y regresa.
+        RET
+Suena endp
+
+;----------------------------------------------------------------------------
+
+Bocina proc                     ;Este procedimiento guarda AX y BX en
+        PUSH    BX              ;la pila para no perder su valor, con
+        MOV     AX, BX          ;esto llama a ajusta y a suena
+        PUSH    AX
+        CALL    Ajustar         ;Pone la frecuencia en el puerto.
+        POP     AX
+        POP     BX
+        CALL    SUENA           ;Activa el speaker y lo desactiva.
+        ret
+Bocina endp
+
+;----------------------------------------------------------------------------
+;CONVERTIR A MINUSCULA SI ERA MAYUSCULA
+
+MINUSCULA PROC
+        CMP AL, 65    ;'A'
+        JB  CONTINUAR ;SI LA TECLA ES MENOR QUE LA 'A' NO HACE NADA
+        CMP AL, 90    ;'Z'
+        JA  CONTINUAR ;SI LA TECLA ES MAYOR QUE LA 'Z' NO HACE NADA
+        ADD AL, 32    ;Convierte may£scula en min£scula.
+     CONTINUAR:
+        RET
+MINUSCULA ENDP
+
+;----------------------------------------------------------------------------
+;CAPTURA LA TECLA CON LA NOTA QUE EL USUARIO DESEA.
+
+TECLA PROC
+        MOV     AH,8            ;Si la hay, obtiene la nota
+        INT     21H
+        CALL    MINUSCULA
+        RET
+TECLA ENDP
+;----------------------------------------------------------------------------
+;Cicla el programa hasta que el usuario presione la tecla ESC.
+;El procedimiento reacciona a las teclas indicadas en el segmento de datos.
+;Cualquier otra tecla es ignorada.
+;La tecla presionada es convertida a min£scula, ya que la tabla ASCII
+;trata distinto unas de otras.
+;Despu‚s de que cada tecla es presionada, el ciclo vuelve al inicio y
+;se repite.
+;Si la tecla presionada corresponde a una nota musical, el c¢digo
+;correspondiente es enviado al parlante.
+
+SPEAKER PROC
+COMIENZA:
+        CALL    TECLA
+        CMP     AL,'q'   ;DO alto
+        JNE     S1       ;SI NO ES LA TECLA ESPERADA, SALTA PARA VERIFICAR LA SIGUIENTE.
+		CALL DO4   		 ;SI ES LA TECLA ESPERADA, GENERA EL SONIDO CORRESPONDIENTE	  
+        JMP     COMIENZA ;DESPUES DEL SONIDO REINICIA PARA ESPERAR OTRO SONIDO.
+S1:     CMP     AL,'w'   ;RE alto
+        JNE     S2
+		PRINT "RE4," TONO    587 
+        JMP     COMIENZA
+S2:     CMP     AL,'e'   ;MI alto
+        JNE     S3
+		PRINT "MI4," TONO    659
+        JMP     COMIENZA
+S3:     CMP     AL,'r'   ;FA alto
+        JNE     S4
+        PRINT "FA4," TONO    698
+        JMP     COMIENZA
+S4:     CMP     AL,'t'   ;SOL alto
+        JNE     S5
+        PRINT "SOL4," TONO    784
+        JMP     COMIENZA
+S5:     CMP     AL,'y'   ;LA alto
+        JNE     S6
+        PRINT "LA4," TONO    880
+        JMP     COMIENZA
+S6:     CMP     AL,'u'   ;SI alto
+        JNE     S8
+        PRINT "SI4," TONO    988
+        JMP     COMIENZA
+S8:     CMP     AL,'2'   ;DO# alto
+        JNE     S9
+        PRINT "DO#4," TONO    554
+        JMP     COMIENZA
+S9:     CMP     AL,'3'   ;RE# alto
+        JNE     S10
+        PRINT "RE#4," TONO    622
+        JMP     COMIENZA
+S10:    CMP     AL,'5'   ;FA# alto
+        JNE     S11
+        PRINT "FA#4," TONO    740
+        JMP     COMIENZA
+S11:    CMP     AL,'6'   ;SOL# alto
+        JNE     S12
+        PRINT "SOL#4," TONO    830
+        JMP     COMIENZA
+S12:    CMP     AL,'7'   ;LA# alto
+        JNE     S13
+        PRINT "LA#4," TONO    923
+        JMP     COMIENZA
+S13:    CMP     AL,'z'   ;DO bajo
+        JNE     S14
+        PRINT "DO3," TONO    261
+        JMP     COMIENZA
+S14:    CMP     AL,'x'   ;RE bajo
+        JNE     S15
+        PRINT "RE3," TONO    293
+        JMP     COMIENZA
+S15:    CMP     AL,'c'   ;MI bajo
+        JNE     S16
+        PRINT "MI3," TONO    329
+        JMP     COMIENZA
+S16:    CMP     AL,'v'   ;FA bajo
+        JNE     S17
+        PRINT "FA3," TONO    349
+        JMP     COMIENZA
+S17:    CMP     AL,'b'   ;SOL bajo
+        JNE     S18
+        PRINT "SOL3," TONO    392
+        JMP     COMIENZA
+S18:    CMP     AL,'n'   ;LA bajo
+        JNE     S19
+        PRINT "LA3," TONO    466
+        JMP     COMIENZA
+S19:    CMP     AL,'m'   ;SI bajo
+        JNE     S20
+        PRINT "SI3," TONO    498
+        JMP     COMIENZA
+S20:    CMP     AL,'s'   ;DO# bajo
+        JNE     S21
+        PRINT "DO#3," TONO    277
+        JMP     COMIENZA
+S21:    CMP     AL,'d'   ;RE# bajo
+        JNE     S22
+        PRINT "RE#3," TONO    311
+        JMP     COMIENZA
+S22:    CMP     AL,'g'   ;FA# bajo
+        JNE     S23
+        PRINT "FA#3," TONO    370
+        JMP     COMIENZA
+S23:    CMP     AL,'h'   ;SOL# bajo
+        JNE     S24
+        PRINT "SOL#3," TONO    415
+        JMP     COMIENZA
+S24:    CMP     AL,'j'   ;LA# bajo
+        JNE     S25
+        PRINT "LA#3," TONO    466
+        JMP     COMIENZA
+S25:    CMP     AL,27 ;27 = tecla ESC (terminar).
+		JMP     COMIENZA
+        JMP     TERMINAR   
+        RET
+SPEAKER ENDP
+terminar: MOV AX, 4CH ; terminar programa
+		  INT 21H 
+;----------------------------------------------------------------------------
+MENSAJE PROC ;imprimir mensaje principal
+    
+        MOV AH,6        ;Modo de video
+        XOR AL,AL
+        XOR CX,CX
+        MOV DX,184FH    ;pintar toda la pantalla
+        MOV BH,0F2H     ;color fondo blanco letras verdes
+        INT 10H         ;int video     
+        LEA DX, MsgMain ;offset mensaje
+        MOV AH, 9       ; imprimir mensaje
+        INT 21H       
+        
+        ;MOV AH, 1
+        ;INT 21H
+        
+        RET 
+        
+MENSAJE ENDP
+;----------------------------------------------------------------------------
+DO4 PROC
+	PRINT "DO4," 
+	TONO    523  
+	RET
+DO4 ENDP
