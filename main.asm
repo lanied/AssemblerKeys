@@ -40,7 +40,7 @@ CODE SEGMENT
         MOV DS, AX
         
         CALL MENSAJE;imprime mensaje 
-        CALL SPEAKER 
+        CALL SPEAKER;inicia el programa principal
  
     START ENDP    
         
