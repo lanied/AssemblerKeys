@@ -1,0 +1,9 @@
+*.exe.*
+*.debug
+*.list
+*.symbol
+*.exe_*
+*.~asm
+*.symbol
+*.debug
+*.debug

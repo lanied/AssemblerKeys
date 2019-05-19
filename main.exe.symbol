@@ -5,7 +5,7 @@ Name                     	Offset    	Size      	Type      	Segment
 STACK                    	00000     	-5        	SEGMENT   	(ITSELF)  
 DATA                     	00010     	-5        	SEGMENT   	(ITSELF)  
 MSGMAIN                  	00000     	1         	VAR       	DATA      
-CODE                     	00036     	-5        	SEGMENT   	(ITSELF)  
+CODE                     	0003E     	-5        	SEGMENT   	(ITSELF)  
 START                    	00000     	-1        	NEAR      	CODE      
 CLRSCR                   	0000B     	-1        	NEAR      	          
 BOCINAON                 	00019     	-1        	NEAR      	          
@@ -143,6 +143,6 @@ S25                      	00476     	-1        	LABEL
 TERMINAR                 	0047E     	-1        	LABEL     	          
 MENSAJE                  	00483     	-1        	NEAR      	          
 ===================================================================================================
-[ 18/05/2019  --  07:38:21 p. m. ] 
+[ 18/05/2019  --  07:58:16 p. m. ] 
 < END >
  
