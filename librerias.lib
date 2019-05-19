@@ -232,17 +232,20 @@ terminar: MOV AX, 4CH ; terminar programa
 		  INT 21H 
 ;----------------------------------------------------------------------------
 MENSAJE PROC ;imprimir mensaje principal
-    
-        MOV AH,6        ;Modo de video
-        XOR AL,AL
-        XOR CX,CX
-        MOV DX,184FH    ;pintar toda la pantalla
-        MOV BH,0F2H     ;color fondo blanco letras verdes
-        INT 10H         ;int video   
-		MOV AH,6 
-		MOV DH,0H
-		MOV DL,0H
-		INT 10H
+        
+		MOV AH, 06h    ; Scroll up function
+		XOR AL, AL     ; Clear entire screen
+		XOR CX, CX     ; Upper left corner CH=row, CL=column
+		MOV DX, 184FH  ; lower right corner DH=row, DL=column 
+        MOV BH, 02FH     ;color fondo blanco letras verdes
+        INT 10H         ;int video
+		
+		MOV AH,02h   ;setting cursor position 
+		MOV BH,00h   ;page number
+		MOV DH,00h   ;row
+		MOV DL,00h   ;column
+		INT 10h
+				
         LEA DX, MsgMain ;offset mensaje
         MOV AH, 9       ; imprimir mensaje
         INT 21H       

@@ -11,7 +11,7 @@ ENDS
 
 DATA SEGMENT  
 
-MsgMain DB '                PROYECTO PIANO EDUARDO',13,10
+MsgMain DB '               PROYECTO PIANO EDUARDO',13,10
         DB 13,10
         DB '                 INGRESE LAS NOTAS',13,10  
         DB '     _______________________________________  ',13,10
@@ -23,9 +23,8 @@ MsgMain DB '                PROYECTO PIANO EDUARDO',13,10
         DB '    |   |   |   |   |   |   |   |   |   |   | ',13,10
         DB '    |___|___|___|___|___|___|___|___|___|___| ',13,10
         DB '                                              ',13,10 
-        DB '            PRESIONE ESC PARA SALIR'           ,13,10 
+        DB '              PRESIONE ESC PARA SALIR'         ,13,10 
         DB '  --------------------------------------------',13,10,'$'
-
 
 
 ENDS
