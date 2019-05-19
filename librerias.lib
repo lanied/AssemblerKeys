@@ -223,7 +223,11 @@ S24:    CMP     AL,'j'   ;LA# bajo
         JNE     S25
         TONO    466,"LA#3," 
         JMP     COMIENZA
-S25:    CMP     AL,27 ;27 = tecla ESC (terminar).
+S25:    CMP     AL,'k'   ;LA# bajo
+        JNE     S26
+        CALL	LIMPIAR 
+        JMP     COMIENZA
+S26:    CMP     AL,27 ;27 = tecla ESC (terminar).
 		JMP     COMIENZA
         JMP     TERMINAR   
         RET
@@ -257,3 +261,8 @@ MENSAJE PROC ;imprimir mensaje principal
         
 MENSAJE ENDP
 ;----------------------------------------------------------------------------
+LIMPIAR PROC ;limpia las notas
+		CALL	CLRSCR
+		CALL	MENSAJE
+		RET
+LIMPIAR ENDP
