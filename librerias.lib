@@ -228,8 +228,8 @@ S25:    CMP     AL,'k'   ;Limpiar
         CALL	LIMPIAR 
         JMP     COMIENZA
 S26:    CMP     AL,27 ;27 = tecla ESC (terminar).
-		CALL    TERMINAR  
-		JMP     COMIENZA 
+		JNE     COMIENZA
+		CALL    TERMINAR   
         RET
 SPEAKER ENDP
 
