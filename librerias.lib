@@ -223,7 +223,7 @@ S24:    CMP     AL,'j'   ;LA# bajo
         JNE     S25
         TONO    466,"LA#3," 
         JMP     COMIENZA
-S25:    CMP     AL,'k'   ;LA# bajo
+S25:    CMP     AL,'k'   ;Limpiar
         JNE     S26
         CALL	LIMPIAR 
         JMP     COMIENZA
