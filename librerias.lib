@@ -228,12 +228,12 @@ S25:    CMP     AL,'k'   ;Limpiar
         CALL	LIMPIAR 
         JMP     COMIENZA
 S26:    CMP     AL,27 ;27 = tecla ESC (terminar).
-		JMP     COMIENZA
-        JMP     TERMINAR   
+		CALL    TERMINAR  
+		JMP     COMIENZA 
         RET
 SPEAKER ENDP
-terminar: MOV AX, 4CH ; terminar programa
-		  INT 21H 
+
+
 ;----------------------------------------------------------------------------
 MENSAJE PROC ;imprimir mensaje principal
         
@@ -266,3 +266,9 @@ LIMPIAR PROC ;limpia las notas
 		CALL	MENSAJE
 		RET
 LIMPIAR ENDP
+
+TERMINAR PROC
+		CALL	CLRSCR
+		MOV AX, 4CH ; terminar programa
+		INT 21H 		
+TERMINAR ENDP

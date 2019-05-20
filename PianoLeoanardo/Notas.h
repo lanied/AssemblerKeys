@@ -37,3 +37,9 @@ typedef struct {
   OneButton btn;    // Boton
   char ch;     // Dato a enviar
 } key;
+
+key keys[] = {//nombre,boton,dato
+  {"DO4", OneButton(A1, true), DO4},
+  {"RE4", OneButton(A2, true), RE4},
+  {"Exit", OneButton(A3, true),Exit}
+};

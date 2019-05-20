@@ -5,12 +5,8 @@
 
 #include "Notas.h"
 
-key keys[] = {
-  {"DO4", OneButton(A1, true), DO4},
-  {"RE4", OneButton(A2, true), RE4},
-  {"Exit", OneButton(A3, true),Exit}
-};
-
+volatile String saveKeys;//struc
+volatile int btnI;
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
@@ -30,5 +26,18 @@ void loop() {
 }
 
 void clicked(){
-  //TODO: print lcd "nom" key
+  
+  //TODO: print lcd "nom" key btnI
+      //send keyboard data
+      //save key saveKeys=;
 }//click
+
+void exitAsm(){
+  //todo: send exit func
+}
+
+void play(){
+  //TODO: clear func asm
+  //print lcd "nom" of saveKeys
+  //send keyboard data
+}
