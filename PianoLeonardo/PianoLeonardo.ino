@@ -6,9 +6,9 @@
 #include "Notas.h"
 
 saveKeys saveKey[50];
-volatile int savePos = 0;
-volatile int btnI;
-volatile int octava;
+volatile byte savePos = 0;
+volatile byte btnI;
+volatile byte octava;
 
 LiquidCrystal_I2C lcd(0x27, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);
 
@@ -72,7 +72,7 @@ void play() {
   Keyboard.write(Clean);
   lcd.clear();
 
-  for (int i = 0; i < savePos ; i++) {
+  for (byte i = 0; i < savePos ; i++) {
     lcd.print(saveKey[i].nom);
     Keyboard.write(saveKey[i].ch);
     delay(500);
