@@ -16,6 +16,12 @@ typedef struct {
   volatile char ch;     // Dato a enviar
 } key;
 
+typedef struct {
+  String nom;       //nombre
+  char ch;         // Dato a enviar
+} saveKeys;
+
+
 //*************************************************
 //**  ARRAY DE NOTAS
 //*************************************************

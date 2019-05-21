@@ -5,7 +5,8 @@
 
 #include "Notas.h"
 
-String saveKeys ="";
+saveKeys saveKey[50];
+volatile int savePos = 0;
 volatile int btnI;
 volatile int octava;
 
@@ -21,7 +22,7 @@ void setup() {
   Keyboard.begin();
 
   //attach event every btn
-  for (btnI = 0; btnI < 12; i++) {
+  for (btnI = 0; btnI < 12; btnI++) {
     keys[btnI].btn.attachClick(clicked);
   }
   //boton 13 funciones
@@ -35,9 +36,9 @@ void loop() {
   octava = map(analogRead(A10), 0, 1023, 1, 2);
 
   //configurar botones
-  for (btnI = 0; btnI < 12 ; i++) {
+  for (btnI = 0; btnI < 12 ; btnI++) {
     keys[btnI].btn.tick();
-
+  //definir octava
     if (octava == 1) {
       keys[btnI].ch = firstOctave[btnI];
     } else {
@@ -51,24 +52,40 @@ void loop() {
 }
 
 void clicked() {
-  //imprimir nota
-  lcd.clear();
-  lcd.print(keys[btnI].nom + (octava + 2)+",");
   //enviar nota
   Keyboard.write(keys[btnI].ch);
-  //guardar nota saveKeys+=;
-  saveKeys.concat(keys[btnI].ch);
+  //guardar nota saveKeys;
+  if (savePos < sizeof(saveKey)) {
+    saveKey[savePos].nom = keys[btnI].nom + (octava + 2) + ",";
+    saveKey[savePos].ch = keys[btnI].ch;
+    savePos++;
+  }
+  if (savePos == 1) { //limpiar pantalla la primera ves
+    lcd.clear();//once
+  }
+  //imprimir nota
+  lcd.print(saveKey[savePos].nom);
 }//click
 
 void play() {
   //TODO: clear func asm
-  //print lcd "nom" of saveKeys
-  //send keyboard data
+  Keyboard.write(Clean);
+  lcd.clear();
+
+  for (int i = 0; i < savePos ; i++) {
+    lcd.print(saveKey[i].nom);
+    Keyboard.write(saveKey[i].ch);
+    delay(500);
+  }
 }
 
 void clearNotes() {
+  lcd.clear();
+  lcd.print("PIANO LEONARDO EQ.10");
+  memset(saveKey, 0, savePos); //limpiar array
 }
 
 void exitAsm() {
-  //todo: send exit func
+  Keyboard.write(Exit);
+  lcd.noBacklight();
 }
