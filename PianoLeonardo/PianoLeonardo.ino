@@ -105,6 +105,7 @@ void exitAsm() {
   Keyboard.write(Exit);
   lcd.noBacklight();
   //sleep
+  sleep();
 }
 
 void printLCD(String var) {
@@ -117,4 +118,9 @@ void printLCD(String var) {
 
   lcd.print(var);
   keyCounter++;
+}
+
+void sleep() {
+  delay(5000);
+  sleep();
 }
