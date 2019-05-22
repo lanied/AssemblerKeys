@@ -17,7 +17,7 @@ void setup() {
   //mensaje de inicio
   lcd.begin(16, 2);
   lcd.clear();
-  lcd.print("PIANO LEONARDO EQ.10");
+  lcd.print("PIANO LEONARDO");
 
   Keyboard.begin();
 
@@ -38,7 +38,7 @@ void loop() {
   //configurar botones
   for (btnI = 0; btnI < 12 ; btnI++) {
     keys[btnI].btn.tick();
-  //definir octava
+    //definir octava
     if (octava == 1) {
       keys[btnI].ch = firstOctave[btnI];
     } else {
@@ -47,27 +47,30 @@ void loop() {
   }
   //boton 10 "funciones"
   keys[12].btn.tick();
+
   delay(10);
 }
 
 void clicked() {
   //enviar nota
   Keyboard.write(keys[btnI].ch);
+  if (savePos == 0) { //limpiar pantalla la primera ves
+    lcd.clear();//once
+  }
   //guardar nota saveKeys;
   if (savePos < sizeof(saveKey)) {
     saveKey[savePos].nom = keys[btnI].nom + (octava + 2) + ",";
     saveKey[savePos].ch = keys[btnI].ch;
+    //imprimir nota
+    lcd.print(saveKey[savePos].nom);
     savePos++;
+  } else {
+    lcd.println("Memoria");
+    lcd.print("Llena");
   }
-  if (savePos == 1) { //limpiar pantalla la primera ves
-    lcd.clear();//once
-  }
-  //imprimir nota
-  lcd.print(saveKey[savePos].nom);
 }//click
 
 void play() {
-  //TODO: clear func asm
   Keyboard.write(Clean);
   lcd.clear();
 
@@ -81,8 +84,9 @@ void play() {
 void clearNotes() {
   Keyboard.write(Clean);
   lcd.clear();
-  lcd.print("PIANO LEONARDO EQ.10");
-  memset(saveKey, 0, savePos); //limpiar array
+  lcd.print("PIANO LEONARDO");
+  memset(saveKey, 0, sizeof(saveKey)); //limpiar array
+  savePos = 0; //contador a 0
 }
 
 void exitAsm() {
