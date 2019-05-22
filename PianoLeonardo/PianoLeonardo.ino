@@ -25,7 +25,7 @@ void setup() {
   for (btnI = 0; btnI < 12; btnI++) {
     keys[btnI].btn.attachClick(clicked);
   }
-  //boton 13 funciones
+  //boton 10 funciones
   keys[12].btn.attachClick(play);
   keys[12].btn.attachDoubleClick(clearNotes);
   keys[12].btn.attachLongPressStop(exitAsm);
@@ -44,10 +44,9 @@ void loop() {
     } else {
       keys[btnI].ch = secondOctave[btnI];
     }
-    delay(10);
   }
-  //boton 13 "funciones"
-
+  //boton 10 "funciones"
+  keys[12].btn.tick();
   delay(10);
 }
 
