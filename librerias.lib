@@ -41,8 +41,8 @@ Ajustar  PROC                  ;Ajusta la bocina con la frecuencia dada
         PUSH    BP
         MOV     BP, SP
         MOV     DX, 18      
-        MOV     AX, 13353   ;retardo en milisegundos
-        MOV     BX, [BP + 4] ;18.2 tics/seg
+        MOV     AX, 13353  
+        MOV     BX, [BP + 4] ;; 1.193.180 hz
         DIV     BX
         MOV     BX, AX  
         MOV     AL, 0B6h  	;  set for channel  2 (8253)
@@ -237,7 +237,7 @@ SPEAKER ENDP
 ;----------------------------------------------------------------------------
 MENSAJE PROC ;imprimir mensaje principal
         
-		MOV AH, 06h    ; Scroll up function
+		MOV AH, 06h    ; modo de video
 		XOR AL, AL     ; Clear entire screen
 		XOR CX, CX     ; Upper left corner CH=row, CL=column
 		MOV DX, 184FH  ; lower right corner DH=row, DL=column 
