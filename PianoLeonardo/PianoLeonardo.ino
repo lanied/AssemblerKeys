@@ -33,7 +33,7 @@ void setup() {
 
 void loop() {
   //leer octava
-  octava = map(analogRead(A10), 0, 1023, 1, 2);
+  octava = map(analogRead(A3), 0, 1023, 1, 2);
 
   //configurar botones
   for (btnI = 0; btnI < 12 ; btnI++) {
@@ -80,6 +80,7 @@ void play() {
 }
 
 void clearNotes() {
+  Keyboard.write(Clean);
   lcd.clear();
   lcd.print("PIANO LEONARDO EQ.10");
   memset(saveKey, 0, savePos); //limpiar array

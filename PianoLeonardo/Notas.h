@@ -39,5 +39,5 @@ key keys[] = {//nombre,boton,dato
   {"SOLb", OneButton(18, true),},
   {"LAb", OneButton(19, true),},
   {"SIb", OneButton(20, true),},
-  {"btn", OneButton(21, true),}
+  {"btn", OneButton(10, true),}
 };
