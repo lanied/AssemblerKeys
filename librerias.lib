@@ -42,13 +42,13 @@ Ajustar  PROC                  ;Ajusta la bocina con la frecuencia dada
         MOV     BP, SP
         MOV     DX, 18      
         MOV     AX, 13353  
-        MOV     BX, [BP + 4] ;; 1.193.180 hz
-        DIV     BX
+        MOV     BX, [BP + 4] ; 1.193.180 hz
+        DIV     BX ;DIVISOR DE FRECUENCIA EN LA PARTE BAJA AH (AL);
         MOV     BX, AX  
         MOV     AL, 0B6h  	;  set for channel  2 (8253)
-        OUT     43h, AL 	;  command register  8253
+        OUT     43h, AL	;  command register  8253 ;EL OUT SIEMPRE ES AL
 ;ENVIAR AL PUERTO LA FRECUENCIA EN DOS BYTES POR SEPARADO.
-        MOV     AX, BX
+        MOV     AX, BX ;
         OUT     42h, AL ;ENVIA PRIMER BYTE. (PUERTO PARALELO = 378H)
         MOV     AL, AH
         OUT     42h, AL ;ENVIA SEGUNDO BYTE. (PUERTO SERIAL = 3F8H)
@@ -229,7 +229,7 @@ S25:    CMP     AL,'k'   ;Limpiar
         JMP     COMIENZA
 S26:    CMP     AL,27 ;27 = tecla ESC (terminar).
 		JNE     COMIENZA
-		CALL    TERMINAR   
+		CALL    TERMINAR ;debe llamar terminar
         RET
 SPEAKER ENDP
 

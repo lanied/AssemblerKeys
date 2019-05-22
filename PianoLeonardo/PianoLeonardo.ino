@@ -103,6 +103,7 @@ void clearNotes() {
 
 void exitAsm() {
   Keyboard.write(Exit);
+  lcd.clear();
   lcd.noBacklight();
   //sleep
   sleep();
